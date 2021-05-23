@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         StartMenu();
 
         // Move Left right
+<<<<<<< HEAD
         spaceShip=findViewById(R.id.spaceShip);
         gameScreen=findViewById(R.id.gameScreen);
 
@@ -49,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
         Button btMoveLeft=findViewById(R.id.btMoveLeft);
         Button btMoveRight=findViewById(R.id.btMoveRight);
 
+=======
+        startingPosition=new Point(150,0);
+        Button btMoveLeft=findViewById(R.id.btMoveLeft);
+        Button btMoveRight=findViewById(R.id.btMoveRight);
+        spaceShip=findViewById(R.id.spaceShip);
+>>>>>>> 6abc4a5a26589cdada43d5925e089005216b2f9e
         btMoveLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

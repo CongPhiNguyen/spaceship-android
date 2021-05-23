@@ -28,9 +28,14 @@
 
         <LinearLayout
             android:id="@+id/gameScreen"
+<<<<<<< HEAD
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+=======
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+>>>>>>> 6abc4a5a26589cdada43d5925e089005216b2f9e
             android:background="@color/black"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
@@ -39,7 +44,12 @@
                android:id="@+id/spaceShip"
                android:layout_width="100dp"
                android:layout_height="100dp"
+<<<<<<< HEAD
                android:src="@drawable/spaceship"/>
+=======
+               android:src="@drawable/spaceship"
+               android:layout_gravity="center"/>
+>>>>>>> 6abc4a5a26589cdada43d5925e089005216b2f9e
         </LinearLayout>
 
 
