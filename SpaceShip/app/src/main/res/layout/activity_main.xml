@@ -17,46 +17,52 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/teal_200"
+            android:orientation="vertical"
             android:layout_gravity="center_horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nguyễn Công Phi"
+                android:layout_gravity="center_horizontal"
+                android:text="Space Ship"
+                android:textSize="30dp"
+                android:textColor="@color/white"
                 android:padding="10dp"/>
         </LinearLayout>
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/gameScreen"
-<<<<<<< HEAD
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-=======
-            android:layout_width="400dp"
-            android:layout_height="400dp"
->>>>>>> 6abc4a5a26589cdada43d5925e089005216b2f9e
             android:background="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical"
-            android:gravity="bottom">
+            android:orientation="vertical">
            <ImageView
                android:id="@+id/spaceShip"
                android:layout_width="100dp"
                android:layout_height="100dp"
-<<<<<<< HEAD
-               android:src="@drawable/spaceship"/>
-=======
                android:src="@drawable/spaceship"
-               android:layout_gravity="center"/>
->>>>>>> 6abc4a5a26589cdada43d5925e089005216b2f9e
-        </LinearLayout>
+               />
+        </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="400dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Score: 0"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="25dp"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,6 +73,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Left"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btShoot"
+                    android:layout_marginLeft="20dp"
+                    android:text="shoot"/>
                 <Button
                     android:id="@+id/btMoveRight"
                     android:layout_width="wrap_content"
