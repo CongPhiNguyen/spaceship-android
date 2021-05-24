@@ -34,23 +34,28 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
-    Scene scene1, scene2, scene3;
+    Scene scene1, scene2, scene3, scene4;
     Point startingPosition;
-    ImageView spaceShip, meteor;
+    ImageView spaceShip;
     RelativeLayout gameScreen;
     int screenWidth, screenHeight;
     List<Meteor> meteors;
+    int Score;
+    int type=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Score=0;
 
         //Setup menu
         ViewGroup menuScene=findViewById(R.id.menuContainer);
         scene1=Scene.getSceneForLayout(menuScene,R.layout.start_menu, this);
         scene2=Scene.getSceneForLayout(menuScene, R.layout.choose_type,this);
         scene3=Scene.getSceneForLayout(menuScene, R.layout.blank_menu, this);
+        scene4=Scene.getSceneForLayout(menuScene,R.layout.game_over, this);
         scene1.enter();
         StartMenu();
 
@@ -86,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
         gameScreen.setRotation(180.f);
 
     }
-
-
     void StartMenu() {
         Button btPlay, btExit;
         btPlay=findViewById(R.id.btPlay);
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Transition Explode=new Explode();
                         TransitionManager.go(scene3, Explode);
+                        type=1;
                         StartGame();
                     }
                 }, 2000);
@@ -158,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Transition Explode=new Explode();
                         TransitionManager.go(scene3, Explode);
+                        type=2;
                         StartGame();
                     }
                 }, 2000);
@@ -179,14 +184,14 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Transition Explode=new Explode();
                         TransitionManager.go(scene3, Explode);
+                        type=3;
                         StartGame();
                     }
                 }, 2000);
             }
         });
     }
-    void StartGame()
-    {
+    void StartGame() {
         meteors=new ArrayList<Meteor>();
         RandomMeteor();
 
@@ -205,52 +210,69 @@ public class MainActivity extends AppCompatActivity {
                         b.bullet.setY(animatedValue);
                         int bulletX=(int)(b.bullet.getX());
                         int bulletY=(int)(b.bullet.getY());
+                        List<Meteor> destroyMeteor=new ArrayList<Meteor>();
                         for(int i=0;i<meteors.size();i++)
                         {
                             int meteorX=(int)(meteors.get(i).meteor.getX());
                             int meteorY=(int)(meteors.get(i).meteor.getY());
                             if(meteorX+64>bulletX&&meteorX<bulletX+10&&bulletY+20>=meteorY)
                             {
-                                Random r= new Random();
-                                gameScreen.removeView(meteors.get(i).meteor);
-                                meteors.remove(meteors.get(i));
-                                int x=Math.abs(r.nextInt())%(screenWidth-64) + 64;
-                                Point meteorCoord=new Point(x,(int)(screenHeight*0.7));
-                                Meteor m=new Meteor(getApplicationContext(),meteorCoord,screenHeight,gameScreen);
-                                meteors.add(m);
-
-                                ValueAnimator animation = ValueAnimator.ofFloat( (float)(screenHeight*0.7) ,0.f);
-                                animation.setDuration(20000);
-                                animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator updatedAnimation) {
-                                        float animatedValue = (float)updatedAnimation.getAnimatedValue();
-                                        m.meteor.setY(animatedValue);
-                                    }
-
-                                });
-                                animation.addListener(new Animator.AnimatorListener() {
-                                    @Override
-                                    public void onAnimationStart(Animator animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                    }
-
-                                    @Override
-                                    public void onAnimationCancel(Animator animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animator animation) {
-
-                                    }
-                                });
-                                animation.start();
+                                destroyMeteor.add(meteors.get(i));
+                                Score++;
+                                TextView tvScore=findViewById(R.id.tvScore);
+                                tvScore.setText("Score: "+String.valueOf(Score));
                             }
+                        }
+                        for(int i=0;i<destroyMeteor.size();i++)
+                        {
+                            Random r= new Random();
+                            Meteor k= destroyMeteor.get(i);
+                            meteors.remove(k);
+                            gameScreen.removeView(k.meteor);
+                            //Xoá bỏ thiên thạch trong list
+                            int x=Math.abs(r.nextInt())%(screenWidth-128) + 64;
+                            Point meteorCoord=new Point(x,(int)(screenHeight*0.7));
+                            Meteor m=new Meteor(getApplicationContext(),meteorCoord,screenHeight,gameScreen);
+                            meteors.add(m);
+
+                            ValueAnimator animation = ValueAnimator.ofFloat( (float)(screenHeight*0.7) ,0.f);
+                            animation.setDuration(20000);
+                            animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator updatedAnimation) {
+                                    float animatedValue = (float)updatedAnimation.getAnimatedValue();
+                                    m.meteor.setY(animatedValue);
+                                    if(m.meteor.getY()<=10&&m.meteor.getParent()==gameScreen)
+                                    {
+                                        for(int i=0;i<meteors.size();i++)
+                                        {
+                                            gameScreen.removeView(meteors.get(i).meteor);
+                                        }
+                                        meteors.clear();
+                                        Transition Fade=new Fade();
+                                        TransitionManager.go(scene4, Fade);
+
+                                        Button btPlayAgain=findViewById(R.id.btPlayAgain);
+                                        btPlayAgain.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Transition Fade=new Fade();
+                                                TransitionManager.go(scene2, Fade);
+                                                ChooseType();
+                                            }
+                                        });
+                                        Button btExitAgain=findViewById(R.id.btExitAgain);
+                                        btExitAgain.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                finishAffinity();
+                                            }
+                                        });
+                                    }
+                                }
+
+                            });
+                            animation.start();
                         }
 
                     }
@@ -282,10 +304,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    void RandomMeteor()
-    {
+    void RandomMeteor() {
         Random r= new Random();
-        for(int i=0;i<2;i++)
+        for(int i=0;i<type;i++)
         {
             int x=Math.abs(r.nextInt())%(screenWidth-128) + 64;
             Point meteorCoord=new Point(x,(int)(screenHeight*0.7));
@@ -299,6 +320,37 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationUpdate(ValueAnimator updatedAnimation) {
                     float animatedValue = (float)updatedAnimation.getAnimatedValue();
                     m.meteor.setY(animatedValue);
+
+                    if(m.meteor.getY()<=10&&m.meteor.getParent()==gameScreen)
+                    {
+                        for(int i=0;i<meteors.size();i++)
+                        {
+                            gameScreen.removeView(meteors.get(i).meteor);
+                        }
+                        meteors.clear();
+                        Score=0;
+                        TextView tvScore=findViewById(R.id.tvScore);
+                        tvScore.setText("Score: "+String.valueOf(Score));
+                        Transition Fade=new Fade();
+                        TransitionManager.go(scene4, Fade);
+
+                        Button btPlayAgain=findViewById(R.id.btPlayAgain);
+                        btPlayAgain.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Transition Fade=new Fade();
+                                TransitionManager.go(scene2, Fade);
+                                ChooseType();
+                            }
+                        });
+                        Button btExitAgain=findViewById(R.id.btExitAgain);
+                        btExitAgain.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finishAffinity();
+                            }
+                        });
+                    }
                 }
 
             });
@@ -310,6 +362,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
+                    if(!meteors.contains(m))
+                    {
+                        return;
+                    }
+
                 }
 
                 @Override
@@ -322,7 +379,9 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+            m.setAnimator(animation);
             animation.start();
+
         }
     }
 }

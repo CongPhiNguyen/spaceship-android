@@ -13,6 +13,7 @@ import android.widget.Toast;
 public class Meteor {
     public ImageView meteor;
     public Point meteorCoord;
+    public ValueAnimator animator;
     Meteor(Context context, Point meteorCoord, int screenHeight, RelativeLayout gameScreen)
     {
         meteor= new ImageView(context);
@@ -27,5 +28,9 @@ public class Meteor {
         meteor.setX(meteorCoord.x);
         meteor.setY(meteorCoord.y);
 
+    }
+    public void setAnimator(ValueAnimator animator)
+    {
+        this.animator=animator;
     }
 }

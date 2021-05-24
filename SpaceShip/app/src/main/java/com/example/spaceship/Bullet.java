@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,5 +26,4 @@ public class Bullet {
         bullet.setX(bulletCoor.x);
         bullet.setY(bulletCoor.y);
     }
-
 }
